@@ -132,7 +132,6 @@
             <i class="fa-solid fa-arrow-right" style="cursor: pointer;" onclick="goBack()" title="رجوع"></i>
             
             <div style="display: flex; align-items: center; gap: 8px;">
-                <i class="fa-brands fa-facebook" style="color: #1877f2; font-size: 24px;"></i>
                 <span id="topBarProfileName">Hadeel AL-Shami</span>
                 <span id="topBarBadgeContainer">
                     <span class="verified-badge" title="حساب موثق">
@@ -246,7 +245,7 @@
             </div>
             
             <div style="flex: 1; position: relative; display: flex; align-items: center; justify-content: center;">
-                <img id="storyMediaImg" class="story-media" style="display: block;">
+                <img id="storyMediaImg" class="story-media" style="display: none;">
                 <video id="storyMediaVid" class="story-media" controls autoplay controlslist="nodownload noplaybackrate" disablepictureinpicture oncontextmenu="return false;" style="display: none;"></video>
             </div>
 
@@ -404,7 +403,6 @@
 
         let posts = [];
 
-        // دالة تحويل الوقت إلى نظام زمني حقيقي متجدد
         function getTimeAgo(timestamp) {
             if (!timestamp) return "منذ لحظات";
             
@@ -870,10 +868,12 @@
                     vidEl.src = activeStory.mediaUrl;
                     vidEl.style.display = 'block';
                     imgEl.style.display = 'none';
+                    vidEl.play();
                 } else {
                     imgEl.src = activeStory.mediaUrl;
                     imgEl.style.display = 'block';
                     vidEl.style.display = 'none';
+                    vidEl.pause();
                 }
 
                 document.getElementById('storyTimeText').innerText = getTimeAgo(activeStory.time);
@@ -892,6 +892,8 @@
 
         function closeStory() {
             let el = document.getElementById('storyViewerModal');
+            let vid = document.getElementById('storyMediaVid');
+            if(vid) vid.pause();
             if (el && el.style.display === 'flex') window.history.back();
         }
 
@@ -1214,7 +1216,9 @@
 
             try {
                 if (window.db) {
+                    // تحديث ترتيب كل منشور عبر إضافة حقل order أو إعادة كتابة المستندات بترتيبها الجديد
                     for (let i = 0; i < posts.length; i++) {
+                        posts[i].orderIndex = i;
                         await updatePostInCloud(posts[i]);
                     }
                 }
@@ -1649,9 +1653,12 @@
                         isLocked: isLocked,
                         commentsCount: "0 تعليقات",
                         viewers: [],
-                        comments: []
+                        comments: [],
+                        orderIndex: posts.length
                     };
                     posts.unshift(newPost);
+                    // إعادة ترتيب الـ orderIndex للجميع لضمان التوافق
+                    posts.forEach((p, idx) => p.orderIndex = idx);
                     await updatePostInCloud(newPost);
                     alert("تم النشر بنجاح!");
                 }
@@ -1875,6 +1882,14 @@
             renderFeed();
         }
 
+        function sortPostsList(list) {
+            return list.sort((a, b) => {
+                let orderA = a.orderIndex !== undefined ? a.orderIndex : Number(a.id);
+                let orderB = b.orderIndex !== undefined ? b.orderIndex : Number(b.id);
+                return orderA - orderB;
+            });
+        }
+
         async function fetchInitialCloudData(db) {
             try {
                 const postsQuery = window.firebaseFirestore.getDocs(window.firebaseFirestore.collection(db, "posts"));
@@ -1883,123 +1898,50 @@
                 const bioDoc = window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "bio_data"));
                 const storyDoc = window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "story_data"));
 
-                const [postsSnap, accountsSnap, coverSnap, bioSnap, storySnap] = await Promise.all([
+                const [postsSnap, accountsRes, coverRes, bioRes, storyRes] = await Promise.all([
                     postsQuery, accountsDoc, coverDoc, bioDoc, storyDoc
                 ]);
 
-                let loadedPosts = [];
-                postsSnap.forEach((docSnap) => {
-                    loadedPosts.push(docSnap.data());
-                });
-
-                if (loadedPosts.length > 0) {
-                    loadedPosts.sort((a, b) => b.id - a.id);
-                    posts = loadedPosts;
-                } else {
-                    posts = [
-                        {
-                            id: 1722000000000,
-                            authorId: 1,
-                            text: "تفضلو رابط الواتساب الخاص بي للتواصل والاستفسارات 👇\nhttps://wa.me/",
-                            mediaFiles: [],
-                            reactions: "8",
-                            reactionType: "😆",
-                            isLocked: false,
-                            commentsCount: "8 تعليقات",
-                            viewers: [],
-                            comments: []
-                        }
-                    ];
+                if (accountsRes.exists() && accountsRes.data().list) {
+                    accounts = accountsRes.data().list;
                 }
-                renderFeed();
-
-                if (accountsSnap.exists() && accountsSnap.data().list) {
-                    accounts = accountsSnap.data().list;
-                    updateMainProfileVerificationDisplay();
-                    updateMainProfileNameDisplay();
-                }
-
-                if (coverSnap.exists()) {
-                    coverImgUrl = coverSnap.data().url || "";
+                if (coverRes.exists() && coverRes.data().url !== undefined) {
+                    coverImgUrl = coverRes.data().url;
                     updateCoverDisplay();
                 }
-
-                if (bioSnap.exists() && bioSnap.data().text) {
-                    bioText = bioSnap.data().text;
+                if (bioRes.exists() && bioRes.data().text !== undefined) {
+                    bioText = bioRes.data().text;
                     document.getElementById('bioTextContainer').innerHTML = bioText;
                 }
-
-                if (storySnap.exists()) {
-                    activeStory = storySnap.data();
+                if (storyRes.exists() && storyRes.data()) {
+                    activeStory = storyRes.data();
                     updateStoryUI();
                 }
 
-                window.firebaseFirestore.onSnapshot(window.firebaseFirestore.collection(db, "posts"), (snapshot) => {
-                    let updatedPosts = [];
-                    snapshot.forEach((docSnap) => {
-                        updatedPosts.push(docSnap.data());
-                    });
-                    if (updatedPosts.length > 0) {
-                        updatedPosts.sort((a, b) => b.id - a.id);
-                        posts = updatedPosts;
-                    } else {
-                        posts = [];
-                    }
-                    renderFeed();
-                    if (currentPostIdForComment !== null) {
-                        let openModal = document.getElementById('commentsModal');
-                        if (openModal && openModal.style.display === 'flex') {
-                            openComments(currentPostIdForComment);
-                        }
-                    }
+                posts = [];
+                postsSnap.forEach((docSnap) => {
+                    posts.push(docSnap.data());
                 });
 
-                window.firebaseFirestore.onSnapshot(window.firebaseFirestore.doc(db, "settings", "accounts_data"), (docSnap) => {
-                    if (docSnap.exists() && docSnap.data().list) {
-                        accounts = docSnap.data().list;
-                        updateMainProfileVerificationDisplay();
-                        updateMainProfileNameDisplay();
+                posts = sortPostsList(posts);
+
+                updateMainProfileVerificationDisplay();
+                updateMainProfileNameDisplay();
+                renderFeed();
+
+                window.firebaseFirestore.onSnapshot(window.firebaseFirestore.collection(db, "posts"), (snapshot) => {
+                    let cloudPosts = [];
+                    snapshot.forEach((docSnap) => {
+                        cloudPosts.push(docSnap.data());
+                    });
+                    if (cloudPosts.length > 0) {
+                        posts = sortPostsList(cloudPosts);
                         renderFeed();
                     }
                 });
 
-                window.firebaseFirestore.onSnapshot(window.firebaseFirestore.doc(db, "settings", "cover_data"), (docSnap) => {
-                    if (docSnap.exists()) {
-                        coverImgUrl = docSnap.data().url || "";
-                        updateCoverDisplay();
-                    }
-                });
-
-                window.firebaseFirestore.onSnapshot(window.firebaseFirestore.doc(db, "settings", "bio_data"), (docSnap) => {
-                    if (docSnap.exists() && docSnap.data().text) {
-                        bioText = docSnap.data().text;
-                        document.getElementById('bioTextContainer').innerHTML = bioText;
-                    }
-                });
-
-                window.firebaseFirestore.onSnapshot(window.firebaseFirestore.doc(db, "settings", "story_data"), (docSnap) => {
-                    if (docSnap.exists()) {
-                        activeStory = docSnap.data();
-                        updateStoryUI();
-                    }
-                });
-
             } catch (e) {
-                console.error("Cloud fetch error:", e);
-                posts = [
-                    {
-                        id: 1722000000000,
-                        authorId: 1,
-                        text: "تفضلو رابط الواتساب الخاص بي للتواصل والاستفسارات 👇\nhttps://wa.me/",
-                        mediaFiles: [],
-                        reactions: "8",
-                        reactionType: "😆",
-                        isLocked: false,
-                        commentsCount: "8 تعليقات",
-                        viewers: [],
-                        comments: []
-                    }
-                ];
+                console.error("Error fetching cloud data:", e);
                 renderFeed();
             }
         }
