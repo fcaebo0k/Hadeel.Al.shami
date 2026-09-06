@@ -368,7 +368,8 @@
     </script>
 
     <script>
-        window.history.pushState({ page: "main" }, "", window.location.href);
+        // تهيئة السجل التاريخي للبلاف
+        window.history.replaceState({ page: "main" }, "", window.location.href);
 
         let isAdmin = false;
         let currentPostIdForComment = null;
@@ -959,6 +960,7 @@
             if (el && el.style.display === 'flex') window.history.back();
         }
 
+        // تم تعديل وظيفة زر الرجوع لإغلاق النوافذ فقط وعدم الانتقال لأي روابط خارجية
         function goBack() {
             let modals = ['createPostScreen', 'imageViewerModal', 'viewersModal', 'storyViewerModal', 'commentsModal', 'videoViewerModal'];
             let openModalId = modals.find(id => {
@@ -969,7 +971,8 @@
             if (openModalId) {
                 window.history.back();
             } else {
-                window.location.href = "https://ooo11223.github.io/fccb.com/";
+                // منع التوجيه لأي رابط خارجي تماماً، والاحتفاظ بالمستخدم في الصفحة الحالية
+                console.log("الصفحة الرئيسية نشطة، لا توجد نوافذ مفتوحة للإغلاق.");
             }
         }
 
@@ -999,9 +1002,9 @@
                 }
             }
 
+            // تم منع إعادة التوجيه تماماً عند الضغط على زر الرجوع في حال لم تكن هناك نافذة مفتوحة
             if (!closedAnyModal) {
                 window.history.pushState({ page: "main" }, "", window.location.href);
-                window.location.href = "https://ooo11223.github.io/fccb.com/";
             }
         });
 
@@ -1216,7 +1219,6 @@
 
             try {
                 if (window.db) {
-                    // تحديث ترتيب كل منشور عبر إضافة حقل order أو إعادة كتابة المستندات بترتيبها الجديد
                     for (let i = 0; i < posts.length; i++) {
                         posts[i].orderIndex = i;
                         await updatePostInCloud(posts[i]);
@@ -1657,7 +1659,6 @@
                         orderIndex: posts.length
                     };
                     posts.unshift(newPost);
-                    // إعادة ترتيب الـ orderIndex للجميع لضمان التوافق
                     posts.forEach((p, idx) => p.orderIndex = idx);
                     await updatePostInCloud(newPost);
                     alert("تم النشر بنجاح!");
