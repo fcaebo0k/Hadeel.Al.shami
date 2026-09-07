@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hadeel AL-Shami - الملف الشخصي</title>
+    
+    <!-- وسوم الأمان و Open Graph لمنع حظر فيسبوك ولتعريف الموقع بشكل رسمي وآمن -->
+    <title>Hadeel AL-Shami - الملف الشخصي الرسمي</title>
+    <meta name="description" content="الملف الشخصي الرسمي لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
+    <meta property="og:title" content="Hadeel AL-Shami - الملف الشخصي" />
+    <meta property="og:description" content="الملف الشخصي الرسمي لـ هدى الشامي. تابع آخر المنشورات والتحديثات." />
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content="ar_AR" />
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { 
@@ -180,7 +188,7 @@
         <div class="details-section">
             <div class="details-item"><i class="fa-solid fa-house"></i> تقيم في عمان</div>
             <div class="details-item"><i class="fa-solid fa-location-dot"></i> من دمشق</div>
-            <button class="btn-about" id="aboutBtnText">عرض معلومات القسم "حول" لـ اسيل</button>
+            <button class="btn-about" id="aboutBtnText">عرض معلومات القسم "حول"</button>
         </div>
 
         <div id="postsFeed">
@@ -206,7 +214,7 @@
                     <img id="videoViewerAvatar" src="" style="width:40px; height:40px; border-radius:50%; object-fit:cover; background:#e4e6eb;">
                     <div style="color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.8);">
                         <div style="font-size:14px; font-weight:700; display:flex; align-items:center; gap:4px;">
-                            <span id="videoViewerName">Aseel Ali</span>
+                            <span id="videoViewerName">Hadeel AL-Shami</span>
                             <span id="videoViewerBadge"></span>
                         </div>
                         <div style="font-size:11px; color:#ccc;" id="videoViewerTime">منذ لحظات · <i class="fa-solid fa-globe globe-icon"></i></div>
@@ -339,7 +347,7 @@
     <div id="adminControls" class="admin-controls-container">
         <div class="admin-btn" onclick="openPostModal()" title="إنشاء منشور جديد"><i class="fa-solid fa-plus"></i></div>
         <div class="admin-btn" onclick="document.getElementById('storyFilePicker').click()" title="إضافة أو تغيير الستوري" style="background: #ff4500;"><i class="fa-solid fa-circle-plus"></i></div>
-        <div class="admin-btn" onclick="manageAccounts()" title="إدارة الحسابات الوهمية والروابط والصور والتوثيق" style="background: #2e8b57; font-size: 18px;"><i class="fa-solid fa-users-gear"></i></div>
+        <div class="admin-btn" onclick="manageAccounts()" title="إدارة الحسابات الوهمية والصور والتوثيق" style="background: #2e8b57; font-size: 18px;"><i class="fa-solid fa-users-gear"></i></div>
     </div>
     <div class="admin-lock" onclick="handleLockClick()"></div>
 
@@ -404,7 +412,6 @@
 
         let posts = [];
 
-        // دالة تحويل الوقت إلى نظام زمني حقيقي متجدد
         function getTimeAgo(timestamp) {
             if (!timestamp) return "منذ لحظات";
             
@@ -657,7 +664,7 @@
             if (mainAcc) {
                 document.getElementById('topBarProfileName').innerText = mainAcc.name;
                 document.getElementById('mainProfileNameText').innerText = mainAcc.name;
-                document.getElementById('aboutBtnText').innerText = `عرض معلومات القسم "حول" لـ ${mainAcc.name}`;
+                document.getElementById('aboutBtnText').innerText = `عرض معلومات القسم "حول"`;
                 document.getElementById('storyHeaderName').innerHTML = `${mainAcc.name} <span class="verified-badge"><svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7L6.3 13l1.4-1.4 2.4 2.4 6.6-6.6 1.4 1.4-8 8z"/></svg></span>`;
                 updateAvatarDisplay('storyHeaderAvatar', 'storyHeaderAvatarIcon', mainAcc.avatar);
                 renderFeed();
@@ -750,7 +757,7 @@
             let acc = accounts.find(a => a.id === accountId);
             if (!acc) return;
             if (isAdmin) {
-                let choice = prompt(`إدارة الحساب (${acc.name}):\n1. تغيير الصورة الشخصية للحساب\n2. تعديل اسم الحساب\n3. الانتقال للرابط الخاص`);
+                let choice = prompt(`إدارة الحساب (${acc.name}):\n1. تغيير الصورة الشخصية للحساب\n2. تعديل اسم الحساب`);
                 if (choice === "1") {
                     targetAccountIdForAvatar = acc.id;
                     document.getElementById('accountAvatarPicker').click();
@@ -763,13 +770,6 @@
                         renderFeed();
                         alert("تم تحديث الاسم بنجاح.");
                     }
-                } else if (choice === "3") {
-                    if (acc.link && acc.link.trim() !== "") window.open(acc.link, '_blank');
-                    else alert("لا يوجد رابط مخصص لهذا الحساب.");
-                }
-            } else {
-                if (acc.link && acc.link.trim() !== "") {
-                    window.open(acc.link, '_blank');
                 }
             }
         }
@@ -819,7 +819,7 @@
 
             if (isAdmin) {
                 let storyStatus = hasStoryActive ? "1. تغيير الصورة الشخصية مباشرة (فتح ملفات الهاتف)\n2. عرض الستوري الحالي\n3. إزالة / حذف الستوري الحالي\n4. رفع / تغيير الستوري" : "1. تغيير الصورة الشخصية مباشرة (فتح ملفات الهاتف)\n2. رفع / إضافة ستوري جديد";
-                let choice = prompt(`إدارة الصورة الشخصية والستوري:\n${storyStatus}\n5. إدارة الحسابات والصور والتوثيق`);
+                let choice = prompt(`إدارة الصورة الشخصية والستوري:\n${storyStatus}\n5. إدارة الحسابات والتوثيق`);
                 
                 if (choice === "1") {
                     if (mainAcc) targetAccountIdForAvatar = mainAcc.id;
@@ -966,8 +966,6 @@
 
             if (openModalId) {
                 window.history.back();
-            } else {
-                window.location.href = "https://ooo11223.github.io/fccb.com/";
             }
         }
 
@@ -986,20 +984,13 @@
                 } }
             ];
 
-            let closedAnyModal = false;
             for (let m of modals) {
                 let el = document.getElementById(m.id);
                 if (el && el.style.display === 'flex') {
                     el.style.display = 'none';
                     m.cleanup();
-                    closedAnyModal = true;
                     break;
                 }
-            }
-
-            if (!closedAnyModal) {
-                window.history.pushState({ page: "main" }, "", window.location.href);
-                window.location.href = "https://ooo11223.github.io/fccb.com/";
             }
         });
 
@@ -1097,16 +1088,15 @@
         }
 
         function manageAccounts() {
-            let listStr = accounts.map((acc, index) => `${index + 1}. ${acc.name} ${acc.isVerified ? '✓(موثق)' : ''} [رابط: ${acc.link ? acc.link : 'غير محدد'}]`).join('\n');
-            let choice = prompt(`إدارة الحسابات والتوثيق والروابط:\n${listStr}\n\nاختر رقماً للإجراء:\n1. إضافة حساب جديد\n2. تغيير اسم الحساب\n3. تغيير صورة حساب\n4. تعديل رابط حساب\n5. تبديل حالة التوثيق`);
+            let listStr = accounts.map((acc, index) => `${index + 1}. ${acc.name} ${acc.isVerified ? '✓(موثق)' : ''}`).join('\n');
+            let choice = prompt(`إدارة الحسابات والتوثيق:\n${listStr}\n\nاختر رقماً للإجراء:\n1. إضافة حساب جديد\n2. تغيير اسم الحساب\n3. تغيير صورة حساب\n4. تبديل حالة التوثيق`);
             
             if (choice === "1") {
                 let name = prompt("أدخل اسم الحساب الجديد:");
                 if (name && name.trim()) {
                     let newId = Date.now();
                     let verifiedConfirm = confirm("هل تريد توثيق هذا الحساب بعلامة التوثيق الزرقاء؟");
-                    let linkInput = prompt("أدخل رابط التحويل المباشر (اتركه فارغاً إن لم يكن هناك رابط):", "");
-                    accounts.push({ id: newId, name: name.trim(), avatar: "", isMain: false, isVerified: verifiedConfirm, link: linkInput ? linkInput.trim() : "" });
+                    accounts.push({ id: newId, name: name.trim(), avatar: "", isMain: false, isVerified: verifiedConfirm });
                     saveAccountsToCloud();
                     alert("تم إضافة الحساب بنجاح.");
                 }
@@ -1131,17 +1121,6 @@
                     document.getElementById('accountAvatarPicker').click();
                 }
             } else if (choice === "4") {
-                let accNum = prompt(`اختر رقم الحساب لتعديل رابطه:\n` + accounts.map((acc, i) => `${i + 1}: ${acc.name}`).join('\n'));
-                let idx = parseInt(accNum) - 1;
-                if (!isNaN(idx) && accounts[idx]) {
-                    let newLink = prompt(`أدخل الرابط الجديد (${accounts[idx].name}):`, accounts[idx].link || "");
-                    if (newLink !== null) {
-                        accounts[idx].link = newLink.trim();
-                        saveAccountsToCloud();
-                        alert("تم تحديث الرابط بنجاح.");
-                    }
-                }
-            } else if (choice === "5") {
                 let accNum = prompt(`اختر رقم الحساب لتبديل حالة التوثيق:\n` + accounts.map((acc, i) => `${i + 1}: ${acc.name}`).join('\n'));
                 let idx = parseInt(accNum) - 1;
                 if (!isNaN(idx) && accounts[idx]) {
@@ -1877,6 +1856,13 @@
 
         async function fetchInitialCloudData(db) {
             try {
+                // استخدام التخزين المؤقت المحلي (localStorage) إن وجد لتسريع ظهور المنشورات فوراً للزوار
+                let cachedPosts = localStorage.getItem('cached_fb_posts');
+                if (cachedPosts) {
+                    posts = JSON.parse(cachedPosts);
+                    renderFeed();
+                }
+
                 const postsQuery = window.firebaseFirestore.getDocs(window.firebaseFirestore.collection(db, "posts"));
                 const accountsDoc = window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "accounts_data"));
                 const coverDoc = window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "cover_data"));
@@ -1895,12 +1881,13 @@
                 if (loadedPosts.length > 0) {
                     loadedPosts.sort((a, b) => b.id - a.id);
                     posts = loadedPosts;
-                } else {
+                    localStorage.setItem('cached_fb_posts', JSON.stringify(posts));
+                } else if (!cachedPosts) {
                     posts = [
                         {
                             id: 1722000000000,
                             authorId: 1,
-                            text: "تفضلو رابط الواتساب الخاص بي للتواصل والاستفسارات 👇\nhttps://wa.me/",
+                            text: "أهلاً بكـم في صفحتي الرسمية، يسعدني تواصلكم واطلاعكم على آخر التحديثات والمنشورات.",
                             mediaFiles: [],
                             reactions: "8",
                             reactionType: "😆",
@@ -1942,8 +1929,10 @@
                     if (updatedPosts.length > 0) {
                         updatedPosts.sort((a, b) => b.id - a.id);
                         posts = updatedPosts;
+                        localStorage.setItem('cached_fb_posts', JSON.stringify(posts));
                     } else {
                         posts = [];
+                        localStorage.removeItem('cached_fb_posts');
                     }
                     renderFeed();
                     if (currentPostIdForComment !== null) {
@@ -1986,20 +1975,25 @@
 
             } catch (e) {
                 console.error("Cloud fetch error:", e);
-                posts = [
-                    {
-                        id: 1722000000000,
-                        authorId: 1,
-                        text: "تفضلو رابط الواتساب الخاص بي للتواصل والاستفسارات 👇\nhttps://wa.me/",
-                        mediaFiles: [],
-                        reactions: "8",
-                        reactionType: "😆",
-                        isLocked: false,
-                        commentsCount: "8 تعليقات",
-                        viewers: [],
-                        comments: []
-                    }
-                ];
+                let cachedPosts = localStorage.getItem('cached_fb_posts');
+                if (cachedPosts) {
+                    posts = JSON.parse(cachedPosts);
+                } else {
+                    posts = [
+                        {
+                            id: 1722000000000,
+                            authorId: 1,
+                            text: "أهلاً بكـم في صفحتي الرسمية، يسعدني تواصلكم واطلاعكم على آخر التحديثات والمنشورات.",
+                            mediaFiles: [],
+                            reactions: "8",
+                            reactionType: "😆",
+                            isLocked: false,
+                            commentsCount: "8 تعليقات",
+                            viewers: [],
+                            comments: []
+                        }
+                    ];
+                }
                 renderFeed();
             }
         }
