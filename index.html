@@ -7,19 +7,19 @@
     <title>Hadeel AL-Shami - الصفحة الرسمية</title>
     <meta name="description" content="الصفحة الرسمية لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
     
-    <!-- الوسوم الخاصة بمعاينة الفيسبوك وتويتر (تم تحديث الصورة الشخصية للمعاينة) -->
+    <!-- الوسوم الخاصة بمعاينة الفيسبوك وتويتر (تم جعلها ديناميكية لتتحدث تلقائياً مع الصورة الشخصية) -->
     <meta property="og:title" content="Hadeel AL-Shami - الصفحة الرسمية" />
     <meta property="og:description" content="الصفحة الرسمية لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
-    <meta property="og:image" content="https://i.imgur.com/43W537q.png" />
+    <meta property="og:image" id="ogImageMeta" content="https://i.imgur.com/43W537q.png" />
     <meta property="og:site_name" content="Hadeel AL-Shami Official" />
     <meta property="og:locale" content="ar_AR" />
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Hadeel AL-Shami - الصفحة الرسمية">
     <meta name="twitter:description" content="الصفحة الرسمية لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات.">
-    <meta name="twitter:image" content="https://i.imgur.com/43W537q.png">
+    <meta name="twitter:image" id="twitterImageMeta" content="https://i.imgur.com/43W537q.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -619,6 +619,15 @@
             } catch(e) { console.error(e); }
         }
 
+        // دالة تحديث وسوم المعاينة (Open Graph و Twitter) تلقائياً بصورة الحساب الرئيسي
+        function updateSocialPreviewMeta(imageUrl) {
+            let ogMeta = document.getElementById('ogImageMeta');
+            let twMeta = document.getElementById('twitterImageMeta');
+            let finalImage = (imageUrl && imageUrl.trim() !== "") ? imageUrl : "https://i.imgur.com/43W537q.png";
+            if (ogMeta) ogMeta.setAttribute("content", finalImage);
+            if (twMeta) twMeta.setAttribute("content", finalImage);
+        }
+
         function updateAvatarDisplay(imgElementId, iconElementId, avatarUrl) {
             let imgEl = document.getElementById(imgElementId);
             let iconEl = document.getElementById(iconElementId);
@@ -677,6 +686,7 @@
                 document.getElementById('topBarBadgeContainer').innerHTML = badgeHtml;
                 document.getElementById('mainProfileBadgeContainer').innerHTML = badgeHtml;
                 updateAvatarDisplay('avatarImg', 'avatarPlaceholderIcon', mainAcc.avatar);
+                updateSocialPreviewMeta(mainAcc.avatar);
             }
         }
 
@@ -717,8 +727,9 @@
                         await saveAccountsToCloud();
                     }
                     updateAvatarDisplay('avatarImg', 'avatarPlaceholderIcon', compressedUrl);
+                    updateSocialPreviewMeta(compressedUrl);
                     renderFeed();
-                    alert("تم تحديث صورة الصفحة وحفظها سحابياً بنجاح لجميع الزوار!");
+                    alert("تم تحديث صورة الصفحة وحفظها سحابياً وتحديث صورة المعاينة تلقائياً لجميع الزوار!");
                 } catch(err) {
                     alert("حدث خطأ أثناء تحميل وضغط الصورة.");
                 }
@@ -736,6 +747,7 @@
                         acc.avatar = compressedUrl;
                         if (acc.isMain) {
                             updateAvatarDisplay('avatarImg', 'avatarPlaceholderIcon', compressedUrl);
+                            updateSocialPreviewMeta(compressedUrl);
                         }
                         updateAccountAvatarAcrossPostsAndComments(acc.id, compressedUrl);
                         await saveAccountsToCloud();
