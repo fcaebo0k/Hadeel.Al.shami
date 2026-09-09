@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- وسوم الأمان و Open Graph لمنع حظر فيسبوك ولتعريف الموقع بشكل رسمي وآمن -->
-    <title>Hadeel AL-Shami - الملف الشخصي الرسمي</title>
-    <meta name="description" content="الملف الشخصي الرسمي لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
+    <title>Hadeel AL-Shami - الصفحة الرسمية</title>
+    <meta name="description" content="الصفحة الرسمية لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
     
     <!-- وسوم Open Graph المحدثة لمنع الحظر -->
-    <meta property="og:title" content="Hadeel AL-Shami - الملف الشخصي الرسمي" />
-    <meta property="og:description" content="الملف الشخصي الرسمي لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
+    <meta property="og:title" content="Hadeel AL-Shami - الصفحة الرسمية" />
+    <meta property="og:description" content="الصفحة الرسمية لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="" />
     <meta property="og:image" content="https://i.imgur.com/43W537q.png" />
@@ -19,8 +19,8 @@
     
     <!-- وسوم تويتر كارد لتوافق إضافي -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Hadeel AL-Shami - الملف الشخصي الرسمي">
-    <meta name="twitter:description" content="الملف الشخصي الرسمي لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات.">
+    <meta name="twitter:title" content="Hadeel AL-Shami - الصفحة الرسمية">
+    <meta name="twitter:description" content="الصفحة الرسمية لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات.">
     <meta name="twitter:image" content="https://i.imgur.com/43W537q.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -48,12 +48,18 @@
         .verified-badge { color: #1877f2; font-size: 16px; display: inline-flex; align-items: center; vertical-align: middle; position: relative; }
 
         .bio { text-align: center; font-size: 14px; color: #65676b; margin: 8px 16px; line-height: 1.5; font-weight: 500; cursor: pointer; }
-        .profile-action-buttons { display: flex; gap: 8px; padding: 0 16px 15px 16px; }
-        .btn-add-friend { flex: 1; background: #1877f2; color: #fff; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; }
-        .btn-message { flex: 1; background: #e4e6eb; color: #050505; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; }
         
-        .profile-tabs { display: flex; border-top: 1px solid #ddd; padding: 0 16px; margin-top: 10px; }
-        .tab-item { padding: 15px 20px; font-weight: 700; color: #65676b; cursor: pointer; border-bottom: 3px solid transparent; font-size: 15px; }
+        /* تنسيقات عناصر الصفحة العامة (Page Elements) */
+        .page-category { text-align: center; font-size: 13px; color: #65676b; margin-top: -4px; margin-bottom: 8px; font-weight: 600; }
+        .page-stats-info { text-align: center; font-size: 13px; color: #65676b; margin-bottom: 12px; font-weight: 500; }
+        
+        .profile-action-buttons { display: flex; gap: 8px; padding: 0 16px 15px 16px; }
+        .btn-like-page { flex: 1; background: #1877f2; color: #fff; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-follow-page { flex: 1; background: #e4e6eb; color: #050505; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-message { flex: 0 0 auto; background: #e4e6eb; color: #050505; border: none; border-radius: 6px; padding: 8px 16px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        
+        .profile-tabs { display: flex; border-top: 1px solid #ddd; padding: 0 16px; margin-top: 10px; overflow-x: auto; }
+        .tab-item { padding: 15px 15px; font-weight: 700; color: #65676b; cursor: pointer; border-bottom: 3px solid transparent; font-size: 15px; white-space: nowrap; }
         .tab-item.active { color: #1877f2; border-bottom-color: #1877f2; }
         
         .details-section { padding: 15px 16px; border-top: 1px solid #eee; font-weight: 500; }
@@ -153,7 +159,7 @@
             <div style="display: flex; align-items: center; gap: 8px;">
                 <span id="topBarProfileName">Hadeel AL-Shami</span>
                 <span id="topBarBadgeContainer">
-                    <span class="verified-badge" title="حساب موثق">
+                    <span class="verified-badge" title="صفحة موثقة">
                         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7L6.3 13l1.4-1.4 2.4 2.4 6.6-6.6 1.4 1.4-8 8z"/></svg>
                     </span>
                 </span>
@@ -176,23 +182,29 @@
         <div class="name" id="mainProfileName" onclick="handleAccountClick(1)" style="cursor: pointer;">
             <span id="mainProfileNameText"> Hadeel AL-Shami </span>
             <span id="mainProfileBadgeContainer">
-                <span class="verified-badge" title="حساب موثق">
+                <span class="verified-badge" title="صفحة موثقة">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7L6.3 13l1.4-1.4 2.4 2.4 6.6-6.6 1.4 1.4-8 8z"/></svg>
                 </span>
             </span>
         </div>
         
-        <div class="bio" id="bioTextContainer" onclick="handleBioClick()"> ⛔<br> </div>
+        <!-- معلومات الصفحة العامة (فئة الصفحة والمتابعون) -->
+        <div class="page-category">شخصية عامة · </div>
+        <div class="page-stats-info">المتابعين 13.398</div>
+
+        <div class="bio" id="bioTextContainer" onclick="handleBioClick()"> ....<br> </div>
         
         <div class="profile-action-buttons">
-            <button class="btn-add-friend">إضافة صديق</button>
-            <button class="btn-message">مراسلة</button>
+            <button class="btn-like-page"><i class="fa-solid fa-thumbs-up"></i> إعجاب</button>
+            <button class="btn-follow-page"><i class="fa-solid fa-rss"></i> متابعة</button>
+            <button class="btn-message"><i class="fa-brands fa-facebook-messenger"></i> مراسلة</button>
         </div>
         
         <div class="profile-tabs">
             <div class="tab-item active">المنشورات</div>
+            <div class="tab-item">حول</div>
             <div class="tab-item">الصور</div>
-            <div class="tab-item">ريلز</div>
+            <div class="tab-item">الفيديوهات</div>
         </div>
 
         <div class="details-section">
@@ -659,7 +671,7 @@
                 acc = accounts.find(a => a.id == accOrId);
             }
             if (acc && acc.isVerified) {
-                return `<span class="verified-badge" title="حساب موثق"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7L6.3 13l1.4-1.4 2.4 2.4 6.6-6.6 1.4 1.4-8 8z"/></svg></span>`;
+                return `<span class="verified-badge" title="صفحة موثقة"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-1.9 14.7L6.3 13l1.4-1.4 2.4 2.4 6.6-6.6 1.4 1.4-8 8z"/></svg></span>`;
             }
             return '';
         }
@@ -690,12 +702,12 @@
             if (!isAdmin) return;
             let bioEl = document.getElementById('bioTextContainer');
             let currentBio = bioText.replace(/<br\s*[\/]?>/gi, "\n");
-            let newBio = prompt("تعديل البايو (السيرة الذاتية):", currentBio);
+            let newBio = prompt("تعديل الوصف التعريفي للصفحة:", currentBio);
             if (newBio !== null) {
                 bioText = newBio.trim().replace(/\n/g, "<br>");
                 bioEl.innerHTML = bioText;
                 await saveBioToCloud();
-                alert("تم تحديث وحفظ البايو سحابياً بنجاح للجميع.");
+                alert("تم تحديث وحفظ الوصف سحابياً بنجاح للجميع.");
             }
         }
 
@@ -712,7 +724,7 @@
                     }
                     updateAvatarDisplay('avatarImg', 'avatarPlaceholderIcon', compressedUrl);
                     renderFeed();
-                    alert("تم تحديث الصورة الشخصية وحفظها سحابياً بنجاح لجميع الزوار!");
+                    alert("تم تحديث صورة الصفحة وحفظها سحابياً بنجاح لجميع الزوار!");
                 } catch(err) {
                     alert("حدث خطأ أثناء تحميل وضغط الصورة.");
                 }
@@ -833,8 +845,8 @@
             let hasStoryActive = activeStory && activeStory.mediaUrl && activeStory.mediaUrl.trim() !== "";
 
             if (isAdmin) {
-                let storyStatus = hasStoryActive ? "1. تغيير الصورة الشخصية مباشرة (فتح ملفات الهاتف)\n2. عرض الستوري الحالي\n3. إزالة / حذف الستوري الحالي\n4. رفع / تغيير الستوري" : "1. تغيير الصورة الشخصية مباشرة (فتح ملفات الهاتف)\n2. رفع / إضافة ستوري جديد";
-                let choice = prompt(`إدارة الصورة الشخصية والستوري:\n${storyStatus}\n5. إدارة الحسابات والتوثيق`);
+                let storyStatus = hasStoryActive ? "1. تغيير صورة الصفحة مباشرة (فتح ملفات الهاتف)\n2. عرض الستوري الحالي\n3. إزالة / حذف الستوري الحالي\n4. رفع / تغيير الستوري" : "1. تغيير صورة الصفحة مباشرة (فتح ملفات الهاتف)\n2. رفع / إضافة ستوري جديد";
+                let choice = prompt(`إدارة صورة الصفحة والستوري:\n${storyStatus}\n5. إدارة الحسابات والتوثيق`);
                 
                 if (choice === "1") {
                     if (mainAcc) targetAccountIdForAvatar = mainAcc.id;
