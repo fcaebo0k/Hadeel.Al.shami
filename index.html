@@ -7,11 +7,22 @@
     <!-- وسوم الأمان و Open Graph لمنع حظر فيسبوك ولتعريف الموقع بشكل رسمي وآمن -->
     <title>Hadeel AL-Shami - الملف الشخصي الرسمي</title>
     <meta name="description" content="الملف الشخصي الرسمي لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
-    <meta property="og:title" content="Hadeel AL-Shami - الملف الشخصي" />
-    <meta property="og:description" content="الملف الشخصي الرسمي لـ هدى الشامي. تابع آخر المنشورات والتحديثات." />
-    <meta property="og:type" content="profile" />
+    
+    <!-- وسوم Open Graph المحدثة لمنع الحظر -->
+    <meta property="og:title" content="Hadeel AL-Shami - الملف الشخصي الرسمي" />
+    <meta property="og:description" content="الملف الشخصي الرسمي لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="https://i.imgur.com/43W537q.png" />
+    <meta property="og:site_name" content="Hadeel AL-Shami Official" />
     <meta property="og:locale" content="ar_AR" />
     
+    <!-- وسوم تويتر كارد لتوافق إضافي -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hadeel AL-Shami - الملف الشخصي الرسمي">
+    <meta name="twitter:description" content="الملف الشخصي الرسمي لـ هدى الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات.">
+    <meta name="twitter:image" content="https://i.imgur.com/43W537q.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { 
@@ -140,7 +151,6 @@
             <i class="fa-solid fa-arrow-right" style="cursor: pointer;" onclick="goBack()" title="رجوع"></i>
             
             <div style="display: flex; align-items: center; gap: 8px;">
-                <i class="fa-brands fa-facebook" style="color: #1877f2; font-size: 24px;"></i>
                 <span id="topBarProfileName">Hadeel AL-Shami</span>
                 <span id="topBarBadgeContainer">
                     <span class="verified-badge" title="حساب موثق">
@@ -377,6 +387,11 @@
     </script>
 
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let ogUrlTag = document.querySelector('meta[property="og:url"]');
+            if(ogUrlTag) ogUrlTag.setAttribute("content", window.location.href);
+        });
+
         window.history.pushState({ page: "main" }, "", window.location.href);
 
         let isAdmin = false;
@@ -1856,7 +1871,6 @@
 
         async function fetchInitialCloudData(db) {
             try {
-                // استخدام التخزين المؤقت المحلي (localStorage) إن وجد لتسريع ظهور المنشورات فوراً للزوار
                 let cachedPosts = localStorage.getItem('cached_fb_posts');
                 if (cachedPosts) {
                     posts = JSON.parse(cachedPosts);
