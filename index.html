@@ -36,9 +36,8 @@
         .page-category { text-align: center; font-size: 13px; color: #65676b; margin-top: -4px; margin-bottom: 8px; font-weight: 600; }
         
         .profile-action-buttons { display: flex; gap: 8px; padding: 0 16px 15px 16px; }
-        .btn-like-page { flex: 1; background: #0084ff; color: #fff; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-follow-page { flex: 1; background: #e4e6eb; color: #050505; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-        .btn-message { flex: 0 0 auto; background: #e4e6eb; color: #050505; border: none; border-radius: 6px; padding: 8px 16px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-follow-page { flex: 1; background: #0084ff; color: #fff; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-message { flex: 1; background: #e4e6eb; color: #050505; border: none; border-radius: 6px; padding: 8px; font-weight: 700; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; gap: 6px; }
         
         .profile-tabs { display: flex; border-top: 1px solid #ddd; padding: 0 16px; margin-top: 10px; overflow-x: auto; }
         .tab-item { padding: 15px 15px; font-weight: 700; color: #65676b; cursor: pointer; border-bottom: 3px solid transparent; font-size: 15px; white-space: nowrap; }
@@ -174,8 +173,7 @@
         <div class="bio" id="bioTextContainer" onclick="handleBioClick()">مرحباً بكم في صفحتي الشخصية الرسمية<br></div>
         
         <div class="profile-action-buttons">
-            <button class="btn-like-page"><i class="fa-solid fa-thumbs-up"></i> إعجاب</button>
-            <button class="btn-follow-page"><i class="fa-solid fa-rss"></i> متابعة</button>
+            <button class="btn-follow-page"><i class="fa-solid fa-user-plus"></i> إضافة صديق</button>
             <button class="btn-message"><i class="fa-solid fa-comments"></i> مراسلة</button>
         </div>
         
@@ -1881,18 +1879,14 @@
                 }
             }).catch(e => console.error(e));
 
-            window.firebaseFirestore.onSnapshot(window.firebaseFirestore.collection(db, "posts"), (snapshot) => {
-                let cloudPosts = []
-                snapshot.forEach((doc) => {
+            window.firebaseFirestore.onSnapshot(window.firebaseFirestore.collection(db, "posts"), snapshot => {
+                let cloudPosts = [];
+                snapshot.forEach(doc => {
                     cloudPosts.push(doc.data());
                 });
-                
                 cloudPosts.sort((a, b) => Number(b.id) - Number(a.id));
                 posts = cloudPosts;
                 renderFeed();
-            }, (error) => {
-                console.error(error);
-                document.getElementById('postsFeed').innerHTML = `<div style="text-align: center; padding: 30px; color: red; font-weight: 600;">تعذر جلب المنشورات من السحابة.</div>`;
             });
         }
     </script>
