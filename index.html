@@ -4,8 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>Hadeel AL-Shami - ملف الشخصي</title>
+    <title>Hadeel AL-Shami - الملف الشخصي</title>
     <meta name="description" content="الموقع الرسمي والصفحة التعريفية لـ هديل الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
+
+    <!-- Open Graph Tags (OG Tags) للمعاينة على وسائل التواصل الاجتماعي (مثل فيسبوك) -->
+    <meta property="og:title" content="Hadeel AL-Shami - الملف الشخصي" />
+    <meta property="og:description" content="الموقع الرسمي والصفحة التعريفية لـ هديل الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
+    <!-- ضع هنا رابط الصورة الشخصية المباشر (رابط صورة أو رابط عام) لتظهر كصورة معاينة -->
+    <meta property="og:image" content="https://i.ibb.co/example/avatar.jpg" />
+    <meta property="og:url" content="" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:locale" content="ar_AR" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -605,6 +614,12 @@
                     imgEl.src = avatarUrl;
                     imgEl.style.display = 'block';
                     iconEl.style.display = 'none';
+                    
+                    // تحديث أوتوماتيكي لوسم المعاينة og:image إذا كانت الصورة الحالية هي الصورة الشخصية الرئيسية
+                    if (imgElementId === 'avatarImg') {
+                        let ogImageTag = document.querySelector('meta[property="og:image"]');
+                        if (ogImageTag) ogImageTag.setAttribute('content', avatarUrl);
+                    }
                 } else {
                     imgEl.src = "";
                     imgEl.style.display = 'none';
