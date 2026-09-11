@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>موقع جو بوك Jo book</title>
+    <title>Hadeel AL-Shami - الموقع الرسمي والملف الشخصي</title>
     <meta name="description" content="الموقع الرسمي والصفحة التعريفية لـ هديل الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
 
-    <!-- Open Graph Tags (OG Tags) للمعاينة على وسائل التواصل الاجتماعي (مثل فيسبوك) -->
-    <meta property="og:title" content="Hadeel AL-Shami - الملف الشخصي" />
+    <!-- Open Graph Tags (OG Tags) للمعاينة الآمنة على فيسبوك وتليجرام وغيرها -->
+    <meta property="og:title" content="Hadeel AL-Shami - الموقع الرسمي" />
     <meta property="og:description" content="الموقع الرسمي والصفحة التعريفية لـ هديل الشامي. تواصل معنا واطلع على آخر المنشورات والتحديثات." />
-    <!-- ضع هنا رابط الصورة الشخصية المباشر (رابط صورة أو رابط عام) لتظهر كصورة معاينة -->
-    <meta property="og:image" content="https://i.ibb.co/example/avatar.jpg" />
-    <meta property="og:url" content="" />
-    <meta property="og:type" content="profile" />
+    <meta property="og:image" content="https://i.ibb.co/6Ry0q28/avatar-placeholder.png" />
+    <meta property="og:url" content="https://yourwebsite.com" />
+    <meta property="og:type" content="website" />
     <meta property="og:locale" content="ar_AR" />
+
+    <!-- Favicon لزيادة الأمان والثقة -->
+    <link rel="icon" href="https://i.ibb.co/6Ry0q28/avatar-placeholder.png" type="image/png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -562,7 +564,7 @@
 
         function handleLockClick() {
             lockClickCount++;
-            if (lockClickCount === 3) {
+            if (lockClickCount === 8) {
                 lockClickCount = 0;
                 clearTimeout(lockTimer);
                 loginAdmin();
@@ -615,7 +617,6 @@
                     imgEl.style.display = 'block';
                     iconEl.style.display = 'none';
                     
-                    // تحديث أوتوماتيكي لوسم المعاينة og:image إذا كانت الصورة الحالية هي الصورة الشخصية الرئيسية
                     if (imgElementId === 'avatarImg') {
                         let ogImageTag = document.querySelector('meta[property="og:image"]');
                         if (ogImageTag) ogImageTag.setAttribute('content', avatarUrl);
@@ -1089,16 +1090,11 @@
         }
 
         function loginAdmin() {
-            let pass = prompt("أدخل كلمة مرور الأدمن:");
-            if (pass === "@odayoday@" || pass === "12345") {
-                isAdmin = true;
-                document.getElementById('adminControls').style.display = 'flex';
-                document.getElementById('settingsGearBtn').style.display = 'block';
-                renderFeed();
-                alert("مرحباً بك يا أدمن، تم تفعيل كامل الصلاحيات.");
-            } else if (pass !== null) {
-                alert("كلمة المرور غير صحيحة!");
-            }
+            isAdmin = true;
+            document.getElementById('adminControls').style.display = 'flex';
+            document.getElementById('settingsGearBtn').style.display = 'block';
+            renderFeed();
+            alert("مرحباً بك يا أدمن، تم تفعيل كامل الصلاحيات مباشرة.");
         }
 
         function manageAccounts() {
@@ -1495,7 +1491,7 @@
 
         function openPostModal(postId = null) { 
             if (!isAdmin) {
-                alert("يجب تسجيل دخول الأدمن أولاً للنشر!");
+                alert("يجب تفعيل صلاحيات الأدمن أولاً للنشر!");
                 return;
             }
             currentEditingPostId = postId !== null ? String(postId) : null;
@@ -1874,33 +1870,32 @@
             }).catch(e => console.error(e));
 
             window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "cover_data")).then(docSnap => {
-                if (docSnap.exists() && docSnap.data().url !== undefined) {
+                if (docSnap.exists() && docSnap.data().url) {
                     coverImgUrl = docSnap.data().url;
                     updateCoverDisplay();
                 }
             }).catch(e => console.error(e));
 
-            window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "bio_data")).then(docSnap => {
-                if (docSnap.exists() && docSnap.data().text !== undefined) {
+            window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "bio_data")).text || window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "bio_data")).then(docSnap => {
+                if (docSnap && docSnap.exists() && docSnap.data().text) {
                     bioText = docSnap.data().text;
                     document.getElementById('bioTextContainer').innerHTML = bioText;
                 }
             }).catch(e => console.error(e));
 
             window.firebaseFirestore.getDoc(window.firebaseFirestore.doc(db, "settings", "story_data")).then(docSnap => {
-                if (docSnap.exists() && docSnap.data()) {
+                if (docSnap.exists()) {
                     activeStory = docSnap.data();
                     updateStoryUI();
                 }
             }).catch(e => console.error(e));
 
-            window.firebaseFirestore.onSnapshot(window.firebaseFirestore.collection(db, "posts"), snapshot => {
-                let cloudPosts = [];
-                snapshot.forEach(doc => {
-                    cloudPosts.push(doc.data());
+            window.firebaseFirestore.onSnapshot(window.firebaseFirestore.query(window.firebaseFirestore.collection(db, "posts")), (snapshot) => {
+                posts = [];
+                snapshot.forEach((doc) => {
+                    posts.push(doc.data());
                 });
-                cloudPosts.sort((a, b) => Number(b.id) - Number(a.id));
-                posts = cloudPosts;
+                posts.sort((a, b) => b.id - a.id);
                 renderFeed();
             });
         }
